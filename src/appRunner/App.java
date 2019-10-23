@@ -1,9 +1,6 @@
 package appRunner;
 
-import appRunner.days.DayFour;
-import appRunner.days.DayOne;
-import appRunner.days.DayTwo;
-import appRunner.days.DayThree;
+import appRunner.days.*;
 
 public class App {
 
@@ -11,6 +8,7 @@ public class App {
         //new DayOne().solve();
         //new DayTwo().solve();
         //new DayThree().solve();
-        new DayFour().solve();
+        //new DayFour().solve();
+        new DayFive().solve();
     }
 }
