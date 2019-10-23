@@ -46,7 +46,7 @@ public class Guard {
         return minutesAsleep;
     }
 
-    public String getMinuteMostLikelyAsleep() {
+    private HashMap<String, Integer> getMinuteLog() {
         HashMap<String, Integer> minuteLog = new HashMap<>();
         timesheet.sort(new GuardTimeSheetItemComparator());
         Date startedSleep = null;
@@ -70,6 +70,11 @@ public class Guard {
                 startedSleep = null;
             }
         }
+        return minuteLog;
+    }
+
+    public String getMinuteMostLikelyAsleep() {
+        HashMap<String, Integer> minuteLog = getMinuteLog();
 
         String mostLikelyMinute = "";
         int mostLikelyValue = 0;
@@ -80,5 +85,17 @@ public class Guard {
             }
         }
         return mostLikelyMinute;
+    }
+
+    public int getMaxMinuteValue() {
+        HashMap<String, Integer> minuteLog = getMinuteLog();
+
+        int mostLikelyValue = 0;
+        for (String key : minuteLog.keySet()) {
+            if (minuteLog.get(key) > mostLikelyValue) {
+                mostLikelyValue = minuteLog.get(key);
+            }
+        }
+        return mostLikelyValue;
     }
 }

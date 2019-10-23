@@ -98,8 +98,19 @@ public class DayFour extends Day {
             }
         }
 
-        int answer = Integer.parseInt(maxSleepGuard.getId()) * Integer.parseInt(maxSleepGuard.getMinuteMostLikelyAsleep());
+        int answer1 = Integer.parseInt(maxSleepGuard.getId()) * Integer.parseInt(maxSleepGuard.getMinuteMostLikelyAsleep());
 
-        System.out.println("part1: " + answer);
+        System.out.println("part1: " + answer1);
+
+        Guard maxMinuteGuard = null;
+        for (Guard guard : guards.values()) {
+            if (maxMinuteGuard == null || guard.getMaxMinuteValue() > maxMinuteGuard.getMaxMinuteValue()) {
+                maxMinuteGuard = guard;
+            }
+        }
+
+        int answer2 = Integer.parseInt(maxMinuteGuard.getId()) * Integer.parseInt(maxMinuteGuard.getMinuteMostLikelyAsleep());
+
+        System.out.println("part2: " + answer2);
     }
 }
