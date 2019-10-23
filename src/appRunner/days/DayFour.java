@@ -15,7 +15,7 @@ import java.util.LinkedList;
 public class DayFour extends Day {
 
     public Date parseDate(String line) throws ParseException {
-        String pattern = "yyyy-MM-dd";
+        String pattern = "yyyy-MM-dd HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         int start = line.indexOf('[') + 1;
         int end = line.indexOf(']');
@@ -67,28 +67,28 @@ public class DayFour extends Day {
         Guard currentGuard = null;
 
         for (GuardTimeSheetItem item : timeSheet) {
-            switch (item.getAction()) {
-                case BEGINS_SHIFT:
-                    String id = parseId(item.getRaw());
-                    if (currentGuard != null) {
-                        currentGuard.getTimesheet().add(
-                                new GuardTimeSheetItem("", item.getTimeStamp(), GuardAction.ENDS_SHIFT)
-                        );
-                    }
-                    currentGuard = new Guard(id);
-                    if (!guards.containsKey(id)) {
-                        guards.put(id, currentGuard);
-                    }
-                    currentGuard.getTimesheet().add(item);
-                case WAKES_UP:
-                case ENDS_SHIFT:
-                case FALLS_ASLEEP:
-                case UNDEFINED:
-                default:
-                    if (currentGuard != null) {
-                        currentGuard.getTimesheet().add(item);
-                    }
+            String id = "";
+            if (item.getAction() == GuardAction.BEGINS_SHIFT) {
+                id = parseId(item.getRaw());
+                if (currentGuard != null) {
+                    currentGuard.getTimesheet().add(new GuardTimeSheetItem("", item.getTimeStamp(), GuardAction.ENDS_SHIFT));
+                }
+                if (!guards.containsKey(id)) {
+                    guards.put(id, new Guard(id));
+                }
+                currentGuard = guards.get(id);
+            } else if (currentGuard != null) {
+                id = currentGuard.getId();
+            } else {
+                System.err.println("error: " + item.getRaw());
             }
+            if (!guards.containsKey(id)) {
+                guards.put(id, new Guard(id));
+            }
+            if (!guards.containsKey(id)) {
+                guards.put(id, new Guard(id));
+            }
+            guards.get(id).getTimesheet().add(item);
         }
 
         Guard maxSleepGuard = null;
@@ -98,6 +98,8 @@ public class DayFour extends Day {
             }
         }
 
-        System.out.println("part1: " + maxSleepGuard.getId());
+        int answer = Integer.parseInt(maxSleepGuard.getId()) * Integer.parseInt(maxSleepGuard.getMinuteMostLikelyAsleep());
+
+        System.out.println("part1: " + answer);
     }
 }

@@ -38,8 +38,7 @@ public class Guard {
                 startedSleep = item.getTimeStamp();
             }
             if (startedSleep != null &&
-                (item.getAction() == GuardAction.WAKES_UP ||
-                 item.getAction() == GuardAction.ENDS_SHIFT)){
+                (item.getAction() == GuardAction.WAKES_UP)){
                 long sleepDuration = item.getTimeStamp().getTime() - startedSleep.getTime();
                 minutesAsleep += TimeUnit.MILLISECONDS.toMinutes(sleepDuration);
             }
@@ -56,21 +55,19 @@ public class Guard {
                 startedSleep = item.getTimeStamp();
             }
             if (startedSleep != null &&
-                    (item.getAction() == GuardAction.WAKES_UP ||
-                            item.getAction() == GuardAction.ENDS_SHIFT)){
+                    (item.getAction() == GuardAction.WAKES_UP)){
                 final Calendar c = Calendar.getInstance();
                 c.setTime(startedSleep);
                 long end = item.getTimeStamp().getTime();
-                for (; c.getTimeInMillis() <= end; c.add(Calendar.MINUTE, 1)) {
-                    int hour = c.get(Calendar.HOUR);
-                    int minute = c.get(Calendar.MINUTE);
-                    String key = hour + ":" + minute;
-                    if (minuteLog.containsKey(key)) {
-                        minuteLog.put(key, minuteLog.get(key) + 1);
+                for (; c.getTimeInMillis() < end; c.add(Calendar.MINUTE, 1)) {
+                    String minute = "" + c.get(Calendar.MINUTE);
+                    if (minuteLog.containsKey(minute)) {
+                        minuteLog.put(minute, minuteLog.get(minute) + 1);
                     } else {
-                        minuteLog.put(key, 1);
+                        minuteLog.put(minute, 1);
                     }
                 }
+                startedSleep = null;
             }
         }
 
